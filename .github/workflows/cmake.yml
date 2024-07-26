@@ -16,12 +16,7 @@ jobs:
     strategy:
       matrix:
         os: [ windows-latest ]
-        arch: [ x64 ]
-        include:
-          - os: windows-latest
-            arch: x86
-          - os: windows-latest
-            arch: ARM64
+        arch: [ arm64 ]
     runs-on: ${{ matrix.os }}
 
     permissions:
@@ -39,7 +34,7 @@ jobs:
       run: |
         if ("${{matrix.arch}}" -eq "x64") {
           $msbuildPlatform = "x64"
-        } elif ("${{matrix.arch}}" -eq "ARM64") {
+        } elif ("${{matrix.arch}}" -eq "arm64") {
           $msbuildPlatform = "ARM64"
         } else {
           $msbuildPlatform = "Win32"
