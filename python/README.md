@@ -27,6 +27,20 @@ If you don’t have write permission to the global site-packages directory or do
 % python setup.py install --user
 ```
 
+For Windows users, especially on the ARM64 platform, you can build and install the Python wrapper using Visual Studio. First, you need to install the `pwsh.exe` (Powershell 7). Use `winget install --id Microsoft.Powershell --source winget` to install directly. Then open the `Developer PowerShell for VS 2022`, and execute the following commands. 
+```
+git clone https://github.com/google/sentencepiece.git
+cd sentencepiece
+mkdir build
+cd build
+cmake .. -DSPM_ENABLE_SHARED=OFF -DCMAKE_INSTALL_PREFIX=".\root" 
+cmake --build . --config Release --target install
+cd ../python
+pip install wheel
+python setup.py bdist_wheel
+Get-ChildItem .\dist\sentencepiece*.whl | ForEach-Object { pip install $_.FullName }
+```
+
 ## Usage
 
 See [this google colab page](https://github.com/google/sentencepiece/blob/master/python/sentencepiece_python_module_example.ipynb) to run sentencepiece interactively.
