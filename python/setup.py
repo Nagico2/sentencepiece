@@ -103,14 +103,19 @@ class build_ext(_build_ext):
     ext.extra_link_args = libs
     _build_ext.build_extension(self, ext)
 
-
-if os.name == 'nt':
-  # Must pre-install sentencepice into build directory.
+def get_win_arch():
   arch = 'win32'
   if sys.maxsize > 2**32:
     arch = 'amd64'
   if 'arm' in platform.machine().lower():
     arch = 'arm64'
+  if os.getenv('PYTHON_ARCH', '') == 'ARM64':  # special check for arm64 under ciwheelbuild
+    arch = 'arm64'
+  return arch
+
+if os.name == 'nt':
+  # Must pre-install sentencepice into build directory.
+  arch = get_win_arch()
   if os.path.exists('..\\build\\root_{}\\lib'.format(arch)):
     cflags = ['/std:c++17', '/I..\\build\\root_{}\\include'.format(arch)]
     libs = [
